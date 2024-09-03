@@ -1,66 +1,68 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
++المهمة: بناء نظام إدارة مكتبة مع استعارة الكتب (Library Management System)
+المتطلبات:
+إعداد المشروع:
+قم بإنشاء مشروع جديد باستخدام Laravel.
+قم بإعداد قاعدة بيانات جديدة وربطها بالمشروع.
+جداول قاعدة البيانات:
+إنشاء الجداول التالية:
+books:
+id (مفتاح رئيسي)
+title (اسم الكتاب)
+author (اسم المؤلف)
+description (وصف الكتاب)
+published_at (تاريخ النشر)
+created_at و updated_at (تلقائيين)
+users:
+id (مفتاح رئيسي)
+name (اسم المستخدم)
+email (البريد الإلكتروني)
+password (كلمة المرور)
+created_at و updated_at (تلقائيين)
+borrow_:records:
+id (مفتاح رئيسي)
+book_id (معرّف الكتاب، مفتاح)
+user_id (معرّف المستخدم، مفتاح)
+borrowed_at (تاريخ الاستعارة)
+due_date (تاريخ الإعادة)
+returned_at (تاريخ الإرجاع)
+created_at و updated_at (تلقائيين)
+نظام الـ Auth:
+قم بإعداد نظام ِAuth  باستخدام API tokens باستخدام حزمة JWT بحيث يتمكن المستخدمون من تسجيل الدخول وتسجيل الخروج باستخدام API.
+قم بإنشاء صلاحيات بحيث يمكن للمستخدمين المسجلين فقط استعارة الكتب.
+إنشاء CRUD:
+Books CRUD: قم بإنشاء جميع عمليات الـ CRUD للكتب (إنشاء، عرض، تحديث، حذف).
+Users CRUD: قم بإنشاء عمليات الـ CRUD للمستخدمين مع صلاحيات إدارية.
+Borrow Records CRUD: قم بإنشاء CRUD لسجل الاستعارة بحيث يتمكن المستخدمون من استعارة وإرجاع الكتب.
+تحدي الاستعارة:
+ يحق للمستخدمين المسجلين فقط استعارة الكتب.
+تحقق من توفر الكتاب قبل السماح بالاستعارة (لا يمكن استعارة الكتاب مرتين في نفس الوقت).
+عند استعارة الكتاب، يجب تحديد تاريخ الإرجاع (تلقائيًا بعد 14 يومًا من تاريخ الاستعارة).
+التأكد من صحة البيانات باستخدام Form Requests:
+إنشاء Form Request لكل من الـ Books و Borrow Records:
+BookFormRequest: يجب أن يحتوي على قواعد التحقق (Validation rules) المناسبة عند إضافة أو تحديث كتاب. على سبيل المثال، يجب التحقق من أن عنوان الكتاب title غير فارغ ومؤلف الكتاب author يجب أن يحتوي على أكثر من 3 حروف.
+BorrowRecordFormRequest: يجب أن يحتوي على قواعد التحقق مثل التحقق من أن تاريخ الإعادة due_date ليس قبل تاريخ الاستعارة borrowed_at.
+إدارة الأخطاء باستخدام failedValidation:
+قم بتخصيص طريقة failedValidation في الـ Form Requests بحيث ترسل رسالة خطأ مخصصة إذا فشلت عملية التحقق. هذه الرسالة يجب أن تكون واضحة للمستخدم وتصف المشكلة بالتحديد.
+تنفيذ عمليات بعد النجاح باستخدام passedValidation:
+إذا نجحت عملية التحقق، استخدم طريقة passedValidation لتنفيذ عمليات معينة بعد التحقق. على سبيل المثال، يمكن استخدام passedValidation في BorrowRecordFormRequest لتسجيل وقت إضافي إذا كانت عملية التحقق ناجحة أو إرسال تنبيه. 
+تخصيص أسماء الحقول باستخدام attributes:
+استخدم خاصية attributes في الـ Form Request لتخصيص أسماء الحقول عند عرض رسائل الخطأ. على سبيل المثال، بدلاً من عرض "The title field is required"، يمكن تخصيصها لتظهر "اسم الكتاب مطلوب".
+تخصيص رسائل التحقق باستخدام messages:
+قم بتخصيص رسائل التحقق باستخدام خاصية messages في الـ Form Requests لتقديم رسائل مفهومة أكثر للمستخدم. على سبيل المثال، إذا كان هناك حقل معين يجب أن يحتوي على قيمة معينة، تأكد من أن رسالة الخطأ توضح هذا الشرط بشكل واضح.
+التوثيق و التعليقات:
+يجب توثيق كل الكود باستخدام التعليقات المناسبة (DocBlocks) لضمان سهولة فهم الكود لاحقًا.
+التحدي الإضافي:
+نظام تصفية الكتب:
+قم بإنشاء واجهة API لفلترة الكتب بحيث يمكن للمستخدمين البحث عن كتب بناءً على أحد أو جميع العوامل التالية:
+المؤلف: عرض الكتب لمؤلف معين.
+التصنيف: إضافة نظام تصنيف للكتب (مثل: رواية، تقنية، تعليمية) ثم فلترة الكتب حسب التصنيف.
+توفر الكتاب: فلترة الكتب المتاحة للاستعارة فقط.
+نظام التقييم (Rating):
+أضف نظام تقييم للكتب بحيث يمكن للمستخدمين تقييم الكتب التي قاموا باستعارتها.
+إنشاء CRUD للتقييمات بحيث يمكن للمستخدمين إضافة، عرض، وتحديث تقييماتهم.
+توضيحات إضافية:
+يجب أن تحتوي كل واجهة API على ردود واضحة تشمل رسائل خطأ مناسبة عند الفشل.
+يجب أن تكون كل العمليات مؤمنة بحيث لا يمكن تنفيذها إلا من قبل المستخدمين المصرح لهم.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
-
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
