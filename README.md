@@ -63,6 +63,56 @@ BorrowRecordFormRequest: يجب أن يحتوي على قواعد التحقق �
 توضيحات إضافية:
 يجب أن تحتوي كل واجهة API على ردود واضحة تشمل رسائل خطأ مناسبة عند الفشل.
 يجب أن تكون كل العمليات مؤمنة بحيث لا يمكن تنفيذها إلا من قبل المستخدمين المصرح لهم.
+*********************************************************************************************************************************************************
+### README: Library Management System
 
+**Objective**: Build a Library Management System with book borrowing functionality.
+
+### Project Setup:
+1. **Configure project:
+     git clone https://github.com/samerabbas77/Task4AD-Library-Management-System-.git
+    composer install
+    cp .env.example .env
+    php artisan key:generate
+2.**configure Database:
+   php artisan migrate --seed    
+
+### Database Tables:
+- **Books**: `id`, `title`, `author`, `description`, `published_at`, `created_at`, `updated_at`.
+- **Users**: `id`, `name`, `email`, `password`, `created_at`, `updated_at`.
+- **Borrow Records**: `id`, `book_id`, `user_id`, `borrowed_at`, `due_date`, `returned_at`, `created_at`, `updated_at`.
+
+### Features:
+- **Auth**: JWT-based authentication for login/logout.
+- **Permissions**: Only registered users can borrow books.
+- **CRUD Operations**:
+  - **Books**: Create, Read, Update, Delete.
+  - **Users**: Admin manages CRUD for users.
+  - **Borrow Records**: Users can borrow/return books.
+
+### Borrowing System:
+- Only registered users can borrow.
+- Ensure book availability.
+- Set return date (default 14 days).
+
+### Validation:
+- **Form Requests**:
+  - `BookFormRequest`: Validate book fields (e.g., `title` required, `author` length > 3).
+  - `BorrowRecordFormRequest`: Validate borrow records (e.g., `due_date` > `borrowed_at`).
+  
+- **Custom Error Handling**:
+  - `failedValidation`: Custom error messages.
+  - `passedValidation`: Actions after successful validation.
+
+### Additional Challenges:
+- **Book Filtering**: Filter by author, category, or availability.
+- **Rating System**: Users rate borrowed books, with CRUD operations for ratings.
+
+### Documentation:
+https://documenter.getpostman.com/view/34411360/2sAXjNXqdB
+
+---
+
+This setup ensures a secure, functional library management system with user permissions, book borrowing, and data validation.
 
 
